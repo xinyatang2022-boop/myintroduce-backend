@@ -1,3 +1,5 @@
+const projectRoutes = require("./routes/projectRoutes");
+
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -24,6 +26,9 @@ app.get("/", (req, res) => {
 app.get("/db", (req, res) => {
   res.json({ db: mongoose.connection.db.databaseName });
 });
+
+app.use("/api/projects", projectRoutes);
+
 
 // 404 handler
 app.use((req, res, next) => {
