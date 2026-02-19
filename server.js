@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 const express = require("express");
@@ -5,7 +6,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const createError = require("http-errors");
 
-const connectDB = require("./config/db");
+const connectDB = require("./config/mongodb");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,9 @@ app.use(express.urlencoded({ extended: false }));
 // test route
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Portfolio Backend is running" });
+});
+app.get("/db", (req, res) => {
+  res.json({ db: mongoose.connection.db.databaseName });
 });
 
 // 404 handler
