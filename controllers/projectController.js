@@ -1,56 +1,66 @@
 const Project = require("../models/Project");
 
-// CREATE
+// helper: consistent response format
+const ok = (res, message, data) => res.status(200).json({ success: true, message, data });
+const created = (res, message, data) => res.status(201).json({ success: true, message, data });
+const fail = (res, status, message) => res.status(status).json({ success: false, message });
+
+// CREATE (add)
 exports.createProject = async (req, res) => {
   try {
     const project = await Project.create(req.body);
-    res.status(201).json(project);
+    return created(res, "Project created successfully", project);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return fail(res, 400, error.message);
   }
 };
 
-// READ ALL
+// READ ALL (getAll)
 exports.getProjects = async (req, res) => {
   try {
-    const projects = await Project.find();
-    res.json(projects);
+    const projects = await Project.find().sort({ createdAt: -1 });
+    return ok(res, "Projects fetched successfully", projects);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return fail(res, 500, error.message);
   }
 };
 
-// READ ONE
+// READ ONE (getByID)
 exports.getProjectById = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
-    if (!project) return res.status(404).json({ message: "Not found" });
-    res.json(project);
+    if (!project) return fail(res, 404, "Project not found");
+    return ok(res, "Project fetched successfully", project);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // invalid ObjectId
+    return fail(res, 400, "Invalid project id");
   }
 };
 
-// UPDATE
+// UPDATE (updateByID)
 exports.updateProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(project);
+    const updated = await Project.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updated) return fail(res, 404, "Project not found");
+    // PDF: update only returns success + message (no data)
+    return ok(res, "Project updated successfully");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return fail(res, 400, error.message);
   }
 };
 
-// DELETE
+// DELETE (deleteByID)
 exports.deleteProject = async (req, res) => {
   try {
-    await Project.findByIdAndDelete(req.params.id);
-    res.json({ message: "Project deleted" });
+    const deleted = await Project.findByIdAndDelete(req.params.id);
+    if (!deleted) return fail(res, 404, "Project not found");
+    // PDF: delete only returns success + message (no data)
+    return ok(res, "Project deleted successfully");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return fail(res, 400, "Invalid project id");
   }
 };
