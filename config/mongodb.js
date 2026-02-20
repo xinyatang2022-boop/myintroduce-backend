@@ -1,20 +1,13 @@
-require('dotenv').config()
-const mongoose = require('mongoose');
-const uri = process.env.XinyaDB;
+// config/mongodb.js
+require("dotenv").config();
+const mongoose = require("mongoose");
 
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-
-module.exports = async function() {
+module.exports = async function connectDB() {
   try {
-    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-    await mongoose.connect(uri, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    await mongoose.connect(process.env.XinyaDB);
+    console.log("✅ MongoDB connected:", mongoose.connection.name);
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-
-    // Ensures that the client will close when error happens.
-    await mongoose.disconnect();
+    console.error("❌ MongoDB connection failed:", error.message);
+    throw error;
   }
-}
-// run().catch(console.dir);
+};
