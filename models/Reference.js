@@ -8,4 +8,4 @@ const ReferenceSchema = new mongoose.Schema({
   company: { type: String },
 });
 
-module.exports = mongoose.model("Reference", ReferenceSchema);sssss
+module.exports = mongoose.model("Reference", ReferenceSchema);

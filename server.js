@@ -25,10 +25,21 @@ app.get("/", (req, res) => {
   res.json({ success: true, message: "Portfolio Backend is running" });
 });
 app.get("/db", (req, res) => {
-  res.json({ db: mongoose.connection.db.databaseName });
+  if (mongoose.connection.readyState !== 1 || !mongoose.connection.db) {
+    return res.status(500).json({
+      success: false,
+      message: "MongoDB not connected",
+      readyState: mongoose.connection.readyState,
+    });
+  }
+
+  res.json({
+    success: true,
+    db: mongoose.connection.db.databaseName,
+  });
 });
 
-app.use("/api/projects", projectRoutes);
+
 
 
 // 404 handler
