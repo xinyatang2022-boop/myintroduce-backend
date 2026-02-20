@@ -1,18 +1,11 @@
 const mongoose = require("mongoose");
 
 const ReferenceSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  company: {
-    type: String,
-    required: true
-  },
-  message: {
-    type: String,
-    required: true
-  }
-}, { timestamps: true });
+  firstname: { type: String },
+  lastname: { type: String },
+  email: { type: String },
+  position: { type: String },
+  company: { type: String },
+});
 
-module.exports = mongoose.model("Reference", ReferenceSchema);
+module.exports = mongoose.model("Reference", ReferenceSchema);sssss

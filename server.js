@@ -11,6 +11,7 @@ const createError = require("http-errors");
 const connectDB = require("./config/mongodb");
 
 const app = express();
+require("./config/express")(app);
 const PORT = process.env.PORT || 3000;
 
 // middleware
