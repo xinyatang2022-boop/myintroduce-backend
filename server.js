@@ -1,4 +1,4 @@
-const projectRoutes = require("./routes/projectRoutes");
+
 
 const mongoose = require("mongoose");
 require("dotenv").config();
