@@ -1,5 +1,6 @@
 const User = require("../models/User");
 
+//  convert_id to id and delate _id / __v
 const toClient = (doc) => {
   const obj = doc.toObject();
   obj.id = obj._id.toString();
@@ -74,7 +75,7 @@ exports.updateUser = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "User updated successfully.",
-      data: toClient(updated),
+      
     });
   } catch (err) {
     next(err);
@@ -96,7 +97,7 @@ exports.deleteUser = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "User deleted successfully.",
-      data: toClient(deleted),
+     
     });
   } catch (err) {
     next(err);
