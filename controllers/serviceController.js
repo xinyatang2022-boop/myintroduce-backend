@@ -8,7 +8,7 @@ const toClient = (doc) => {
   delete obj.__v;
   return obj;
 };
-
+//ceated
 exports.createService = async (req, res, next) => {
   try {
     const created = await Service.create(req.body);
@@ -21,7 +21,7 @@ exports.createService = async (req, res, next) => {
     next(err);
   }
 };
-
+//read all
 exports.getServices = async (req, res, next) => {
   try {
     const list = await Service.find().sort({ createdAt: -1 });
@@ -34,7 +34,7 @@ exports.getServices = async (req, res, next) => {
     next(err);
   }
 };
-
+//read one
 exports.getServiceById = async (req, res, next) => {
   try {
     const doc = await Service.findById(req.params.id);
@@ -49,7 +49,7 @@ exports.getServiceById = async (req, res, next) => {
     next(err);
   }
 };
-
+//updated
 exports.updateService = async (req, res, next) => {
   try {
     const updated = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -60,7 +60,7 @@ exports.updateService = async (req, res, next) => {
     next(err);
   }
 };
-
+//delated
 exports.deleteService = async (req, res, next) => {
   try {
     const deleted = await Service.findByIdAndDelete(req.params.id);

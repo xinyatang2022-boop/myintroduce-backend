@@ -1,5 +1,3 @@
-
-
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -11,7 +9,6 @@ const createError = require("http-errors");
 const connectDB = require("./config/mongodb");
 
 const app = express();
-require("./config/express")(app);
 const PORT = process.env.PORT || 3000;
 
 // middleware
@@ -20,7 +17,10 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// test route
+// routes
+require("./config/express")(app);
+
+// test routes
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Portfolio Backend is running" });
 });
@@ -32,22 +32,13 @@ app.get("/db", (req, res) => {
       readyState: mongoose.connection.readyState,
     });
   }
-
-  res.json({
-    success: true,
-    db: mongoose.connection.db.databaseName,
-  });
+  res.json({ success: true, db: mongoose.connection.db.databaseName });
 });
 
+// 404
+app.use((req, res, next) => next(createError(404, "Endpoint not found")));
 
-
-
-// 404 handler
-app.use((req, res, next) => {
-  next(createError(404, "Endpoint not found"));
-});
-
-// global error handler (must be last)
+// error handler
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     success: false,
@@ -57,9 +48,7 @@ app.use((err, req, res, next) => {
 
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`✅ Server running at http://localhost:${PORT}`);
-    });
+    app.listen(PORT, () => console.log(`✅ Server running at http://localhost:${PORT}`));
   })
   .catch((err) => {
     console.error("❌ MongoDB connection failed:", err.message);
