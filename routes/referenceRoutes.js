@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const referenceController = require("../controllers/referenceController");
+const authMiddleware = require("../middleware/auth.middleware");
 // CRUD
 router.post("/", referenceController.createReference);
 router.get("/", referenceController.getAllReferences);
